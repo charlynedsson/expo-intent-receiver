@@ -8,5 +8,5 @@ export type IntentInfo = {
 }
 
 export type IntentReceiverPayload = {
-  [INTENT_RECEIVED_BUNDLE_NAME] : IntentInfo;
+  [INTENT_RECEIVED_BUNDLE_NAME] : IntentInfo[];
 }

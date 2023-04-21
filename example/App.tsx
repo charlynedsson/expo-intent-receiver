@@ -4,7 +4,7 @@ import * as ExpoIntentReceiver from 'expo-intent-receiver';
 import React from 'react';
 
 export default function App() {
-  const [data, setData] = React.useState<ExpoIntentReceiver.IntentInfo[]>([]);  
+  const [data, setData] = React.useState<ExpoIntentReceiver.IntentInfo[]>([]);
   const refIntent = React.useRef(ExpoIntentReceiver.getInitialIntent());
 
   React.useEffect(() => {

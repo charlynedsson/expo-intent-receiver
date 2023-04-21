@@ -54,15 +54,18 @@ class ExpoIntentReceiverModule : Module() {
   // Extracts intent information from the provided intent
   private fun handleIntent(intent: Intent): List<IntentInfo>? {
     // Only handle intents that contain a file or a stream
-    if (intent.type?.startsWith("text") != false ||
-        intent.action in listOf(Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE)
+    if (intent.type?.startsWith("text") ?: true ||
+        intent.action !in listOf(Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE)
     ) {
         return null
-    }
+    }    
     
     // Parse the intent to get the list of URIs for the files or streams
     val parsedIntents = ExpoIntentReceiverHelper.parseIntent(intent)
     
+    // Return null if parsedIntents is null
+    val uris = parsedIntents ?: return null
+
     // Retrieve the context of the activity
     val context = appContext.reactContext ?: return null
     

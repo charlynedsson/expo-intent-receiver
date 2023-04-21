@@ -18,24 +18,22 @@ object ExpoIntentReceiverHelper {
    * @return The list of URIs to be shared. Null if no valid content is found.
    */
   fun parseIntent(intent: Intent): List<Uri>? {
-      // Extract the action and type from the intent.
-      val action = intent.action
-      val type = intent.type
+    // Only handle intents that contain a file or a stream
+    if (intent.type?.startsWith("text") ?: true ||
+        intent.action !in listOf(Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE)
+    ) {
+        return null
+    }  
 
-      // If the intent does not have a valid type or action, return null.
-      if ((type?.startsWith("text") != false) || (action != Intent.ACTION_SEND && action != Intent.ACTION_SEND_MULTIPLE)) {
-          return null
-      }
+    // Extract the list of URIs from the intent.
+    val uriList = when (intent.action) {
+        Intent.ACTION_SEND -> listOfNotNull(intent.getParcelableExtra(Intent.EXTRA_STREAM))
+        Intent.ACTION_SEND_MULTIPLE -> intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+        else -> null
+    }?.filterIsInstance<Uri>() ?: return null
 
-      // Extract the list of URIs from the intent.
-      val uriList = when (action) {
-          Intent.ACTION_SEND -> listOfNotNull(intent.getParcelableExtra(Intent.EXTRA_STREAM))
-          Intent.ACTION_SEND_MULTIPLE -> intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
-          else -> null
-      }?.filterIsInstance<Uri>() ?: return null
-
-      // Return the list of URIs, or null if it's empty.
-      return uriList.ifEmpty { null }
+    // Return the list of URIs, or null if it's empty.
+    return uriList.ifEmpty { null }
   }
 
   /**
@@ -55,11 +53,12 @@ object ExpoIntentReceiverHelper {
           val mimeType = contentResolver.getType(uri)
           // Query the content provider for information about the content.
           val cursor = contentResolver.query(uri, null, null, null, null) ?: continue
-          cursor.use {
-              if (!cursor.moveToFirst()) {
-                  continue
-              }
+          // Skip if cursor is null
+          if (!cursor.moveToFirst()) {
+            continue
+          }
 
+          cursor.use {              
               // Extract the display name of the content.
               val displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
               // Create a file object from the display name.
