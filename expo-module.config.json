@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["ExpoIntentReceiverModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.intentreceiver.ExpoIntentReceiverModule"]
+  }
+}
