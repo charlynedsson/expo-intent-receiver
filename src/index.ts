@@ -12,7 +12,7 @@ const emitter = new EventEmitter(ExpoIntentReceiverModule ?? NativeModulesProxy.
  * @param listener - The listener function to add.
  * @returns A subscription object that can be used to remove the listener later.
  */
-export function addChangeListener(listener: (event: IntentReceiverPayload) => void): Subscription {
+export function addIntentListener(listener: (event: IntentReceiverPayload) => void): Subscription {
   return emitter.addListener<IntentReceiverPayload>(INTENT_RECEIVED_EVENT_NAME, listener);
 }
 
@@ -34,7 +34,7 @@ export function clearIntent(): void {
 
 export type { IntentReceiverPayload, IntentInfo };
 export default {
-  addChangeListener,
+  addIntentListener,
   getInitialIntent,
   clearIntent,
 };

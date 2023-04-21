@@ -8,7 +8,7 @@ export default function App() {
   const refIntent = React.useRef(ExpoIntentReceiver.getInitialIntent());
 
   React.useEffect(() => {
-    const subscription = ExpoIntentReceiver.addChangeListener(({ data }) => {
+    const subscription = ExpoIntentReceiver.addIntentListener(({ data }) => {
       setData((currentData) => [...currentData, ...data])
     })
     return () => subscription.remove();
