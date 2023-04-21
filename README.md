@@ -15,7 +15,6 @@ npm install expo-intent-receiver
 ### Configure Android Intent Filters in app.json
 
 ```json
-//app.json
 {
     "android": {      
         "intentFilters": [
